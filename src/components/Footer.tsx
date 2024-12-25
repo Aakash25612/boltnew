@@ -18,7 +18,7 @@ const navigation = {
   social: [
     { name: 'Facebook', icon: Facebook, href: '#' },
     { name: 'Twitter', icon: Twitter, href: '#' },
-    { name: 'Instagram', icon: Instagram, href: 'arvisiontech' },
+    { name: 'Instagram', icon: Instagram, href: '#' },
   ],
 };
 
@@ -40,15 +40,15 @@ export function Footer() {
             <div className="space-y-4">
               <div className="flex items-center gap-x-2">
                 <Mail className="h-5 w-5 text-gray-400" />
-                <span className="text-sm text-gray-300">contact@arvision.tech</span>
+                <span className="text-sm text-gray-300">arvisiontech@gmail.com</span>
               </div>
               <div className="flex items-center gap-x-2">
                 <Phone className="h-5 w-5 text-gray-400" />
-                <span className="text-sm text-gray-300">+1 (555) 123-4567</span>
+                <span className="text-sm text-gray-300">+91-8015482069</span>
               </div>
               <div className="flex items-center gap-x-2">
                 <MapPin className="h-5 w-5 text-gray-400" />
-                <span className="text-sm text-gray-300">123 Innovation Street, Tech City</span>
+                <span className="text-sm text-gray-300">L-Block, Shastri Nagar, Delhi</span>
               </div>
             </div>
           </div>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ContactInfo } from './ContactInfo';
 import { NavigationLinks } from './NavigationLinks';
 import { SocialLinks } from './SocialLinks';
+import { ContactInfo } from './ContactInfo';
 
 export function Footer() {
   return (

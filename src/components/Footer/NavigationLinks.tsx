@@ -16,7 +16,7 @@ function NavigationSection({ title, links }: NavigationSectionProps) {
           <li key={item.name}>
             <Link
               to={item.href}
-              className="text-sm leading-6 text-gray-300 hover:text-white"
+              className="text-sm leading-6 text-gray-300 hover:text-white transition-colors"
             >
               {item.name}
             </Link>

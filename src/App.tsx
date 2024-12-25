@@ -1,48 +1,39 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import NeetRepeater from './pages/neet/NeetRepeater';
-import Neet11th from './pages/neet/Neet11th';
-import Neet12th from './pages/neet/Neet12th';
-import { NeetCrashCourse } from './pages/neet/NeetCrashCourse';
-import JeeRepeater from './pages/jee/JeeRepeater';
-import Jee11th from './pages/jee/Jee11th';
-import Jee12th from './pages/jee/Jee12th';
-import PhysicalChemistry from './pages/chemistry/PhysicalChemistry';
-import OrganicChemistry from './pages/chemistry/OrganicChemistry';
-import InorganicChemistry from './pages/chemistry/InorganicChemistry';
-import Contact from './components/Contact';
+import { Navbar } from './components/Navbar';
+import { Footer } from './components/Footer';
+import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
+import { BlogPage } from './pages/BlogPage';
+import { ContactPage } from './pages/ContactPage';
+import { CaseStudiesPage } from './pages/CaseStudiesPage';
+import { WebDevelopment } from './pages/services/WebDevelopment';
+import { AppDevelopment } from './pages/services/AppDevelopment';
+import { AIChatbots } from './pages/services/AIChatbots';
+import { ContentCreation } from './pages/services/ContentCreation';
+import { SocialMedia } from './pages/services/SocialMedia';
 
-function App() {
+export function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white flex flex-col">
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          
-          {/* NEET Routes */}
-          <Route path="/neet/repeater" element={<NeetRepeater />} />
-          <Route path="/neet/11th" element={<Neet11th />} />
-          <Route path="/neet/12th" element={<Neet12th />} />
-          <Route path="/neet/crash-course" element={<NeetCrashCourse />} />
-          
-          {/* JEE Routes */}
-          <Route path="/jee/repeater" element={<JeeRepeater />} />
-          <Route path="/jee/11th" element={<Jee11th />} />
-          <Route path="/jee/12th" element={<Jee12th />} />
-          
-          {/* Chemistry Routes */}
-          <Route path="/chemistry/physical" element={<PhysicalChemistry />} />
-          <Route path="/chemistry/organic" element={<OrganicChemistry />} />
-          <Route path="/chemistry/inorganic" element={<InorganicChemistry />} />
-          
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/case-studies" element={<CaseStudiesPage />} />
+            <Route path="/services/web-development" element={<WebDevelopment />} />
+            <Route path="/services/app-development" element={<AppDevelopment />} />
+            <Route path="/services/ai-chatbots" element={<AIChatbots />} />
+            <Route path="/services/content-creation" element={<ContentCreation />} />
+            <Route path="/services/social-media" element={<SocialMedia />} />
+          </Routes>
+        </div>
+        <Footer />
       </div>
     </Router>
   );
 }
-
-export default App;

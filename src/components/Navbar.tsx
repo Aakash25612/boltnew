@@ -1,264 +1,108 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { BookOpen, Menu, X, ChevronDown } from 'lucide-react';
+import React, { useState } from 'react';
+import { Menu, X, ChevronDown } from 'lucide-react';
+import { Link as RouterLink } from 'react-router-dom';
+import { scrollToTop } from '../utils/scroll';
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [neetMenuOpen, setNeetMenuOpen] = useState(false);
-  const [jeeMenuOpen, setJeeMenuOpen] = useState(false);
-  const [mobileNeetOpen, setMobileNeetOpen] = useState(false);
-  const [mobileJeeOpen, setMobileJeeOpen] = useState(false);
-  
-  const location = useLocation();
-  const neetRef = useRef<HTMLDivElement>(null);
-  const jeeRef = useRef<HTMLDivElement>(null);
+const navigation = [
+  { name: 'Home', href: '/' },
+  { name: 'About Us', href: '/about' },
+  {
+    name: 'Services',
+    href: '/services',
+    children: [
+      { name: 'Web Development', href: '/services/web-development' },
+      { name: 'App Development', href: '/services/app-development' },
+      { name: 'AI Chatbots', href: '/services/ai-chatbots' },
+      { name: 'Content Creation', href: '/services/content-creation' },
+      { name: 'Social Media Marketing', href: '/services/social-media' },
+    ],
+  },
+  { name: 'Case Studies', href: '/case-studies' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Contact', href: '/contact' },
+];
 
-  useEffect(() => {
-    setIsOpen(false);
-    setMobileNeetOpen(false);
-    setMobileJeeOpen(false);
-  }, [location]);
+export function Navbar() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (neetRef.current && !neetRef.current.contains(event.target as Node)) {
-        setNeetMenuOpen(false);
-      }
-      if (jeeRef.current && !jeeRef.current.contains(event.target as Node)) {
-        setJeeMenuOpen(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
-
-  const navItems = [
-    { text: 'Home', path: '/' },
-    { 
-      text: 'NEET', 
-      dropdown: true, 
-      items: [
-        { text: 'Repeater Batch', path: '/neet/repeater' },
-        { text: 'Class 11 Chemistry', path: '/neet/11th' },
-        { text: 'Class 12 Chemistry', path: '/neet/12th' },
-        { text: 'Crash Course', path: '/neet/crash-course' }
-      ]
-    },
-    { 
-      text: 'JEE', 
-      dropdown: true, 
-      items: [
-        { text: 'Repeater Batch', path: '/jee/repeater' },
-        { text: 'Class 11 Chemistry', path: '/jee/11th' },
-        { text: 'Class 12 Chemistry', path: '/jee/12th' }
-      ]
-    },
-    { text: 'Physical Chemistry', path: '/chemistry/physical' },
-    { text: 'Organic Chemistry', path: '/chemistry/organic' },
-    { text: 'Inorganic Chemistry', path: '/chemistry/inorganic' },
-    { text: 'Contact', path: '/contact' }
-  ];
+  const handleNavigation = () => {
+    scrollToTop();
+    setMobileMenuOpen(false);
+    setActiveDropdown(null);
+  };
 
   return (
-    <>
-      <nav className="fixed w-full bg-white shadow-md z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <Link to="/" className="flex items-center" onClick={() => setIsOpen(false)}>
-              <BookOpen className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-xl font-bold text-gray-800">Decipher Academy</span>
-            </Link>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1">
-              {navItems.map((item, index) => (
-                item.dropdown ? (
-                  <div key={index} ref={item.text === 'NEET' ? neetRef : jeeRef} className="relative">
-                    <button 
-                      className="px-3 py-2 text-gray-600 hover:text-blue-600 flex items-center"
-                      onClick={() => {
-                        if (item.text === 'NEET') {
-                          setNeetMenuOpen(!neetMenuOpen);
-                          setJeeMenuOpen(false);
-                        } else if (item.text === 'JEE') {
-                          setJeeMenuOpen(!jeeMenuOpen);
-                          setNeetMenuOpen(false);
-                        }
-                      }}
-                    >
-                      {item.text}
-                      <ChevronDown className={`ml-1 h-4 w-4 transform transition-transform duration-200 ${
-                        (item.text === 'NEET' && neetMenuOpen) || (item.text === 'JEE' && jeeMenuOpen) ? 'rotate-180' : ''
-                      }`} />
-                    </button>
-                    {((item.text === 'NEET' && neetMenuOpen) || 
-                      (item.text === 'JEE' && jeeMenuOpen)) && (
-                      <div className="absolute left-0 mt-1 w-48 bg-white rounded-md shadow-lg py-1 animate-fadeIn">
-                        {item.items?.map((subItem, subIndex) => (
-                          <Link 
-                            key={subIndex}
-                            to={subItem.path}
-                            className="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors duration-200"
-                            onClick={() => {
-                              setNeetMenuOpen(false);
-                              setJeeMenuOpen(false);
-                            }}
-                          >
-                            {subItem.text}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <Link
-                    key={index}
-                    to={item.path}
-                    className="px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors duration-200"
-                  >
-                    {item.text}
-                  </Link>
-                )
-              ))}
-            </div>
-            
-            {/* Mobile menu button */}
-            <button 
-              className="md:hidden p-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
+    <header className="fixed w-full bg-white/90 backdrop-blur-sm z-50 border-b border-gray-100">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+        <div className="flex lg:flex-1">
+          <RouterLink to="/" onClick={handleNavigation} className="-m-1.5 p-1.5 text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+            AR Vision
+          </RouterLink>
         </div>
-
-        {/* Mobile menu overlay */}
-        {isOpen && (
-          <div className="fixed inset-0 z-40 md:hidden bg-black bg-opacity-50 backdrop-blur-sm" onClick={() => setIsOpen(false)}>
-            {/* Mobile menu content */}
-            <div 
-              className="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-xl z-50 animate-slideIn"
-              onClick={e => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between p-4 border-b">
-                <Link to="/" className="flex items-center" onClick={() => setIsOpen(false)}>
-                  <BookOpen className="h-8 w-8 text-blue-600" />
-                  <span className="ml-2 text-xl font-bold text-gray-800">Decipher Academy</span>
-                </Link>
-                <button 
-                  className="p-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
-                  onClick={() => setIsOpen(false)}
+        <div className="flex lg:hidden">
+          <button
+            type="button"
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <span className="sr-only">Toggle menu</span>
+            {mobileMenuOpen ? (
+              <X className="h-6 w-6" aria-hidden="true" />
+            ) : (
+              <Menu className="h-6 w-6" aria-hidden="true" />
+            )}
+          </button>
+        </div>
+        <div className="hidden lg:flex lg:gap-x-12">
+          {navigation.map((item) => (
+            <div key={item.name} className="relative">
+              {item.children ? (
+                <div
+                  onMouseEnter={() => setActiveDropdown(item.name)}
+                  onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <X className="h-6 w-6" />
-                </button>
-              </div>
-              
-              <div className="px-2 py-3 space-y-1 overflow-y-auto max-h-[calc(100vh-4rem)]">
-                <Link 
-                  to="/"
-                  className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Home
-                </Link>
-                
-                {/* NEET Mobile Dropdown */}
-                <div className="relative">
-                  <button
-                    className="w-full flex justify-between items-center px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                    onClick={() => {
-                      setMobileNeetOpen(!mobileNeetOpen);
-                      setMobileJeeOpen(false);
-                    }}
-                  >
-                    <span>NEET</span>
-                    <ChevronDown className={`h-4 w-4 transform transition-transform duration-200 ${mobileNeetOpen ? 'rotate-180' : ''}`} />
+                  <button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+                    {item.name}
+                    <ChevronDown className="h-4 w-4" aria-hidden="true" />
                   </button>
-                  {mobileNeetOpen && (
-                    <div className="pl-4 space-y-1 animate-slideDown">
-                      {navItems[1].items?.map((item, index) => (
-                        <Link
-                          key={index}
-                          to={item.path}
-                          className="block px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                          onClick={() => setIsOpen(false)}
+                  {activeDropdown === item.name && (
+                    <div className="absolute left-0 top-full w-48 bg-white rounded-md shadow-lg py-2">
+                      {item.children.map((child) => (
+                        <RouterLink
+                          key={child.name}
+                          to={child.href}
+                          onClick={handleNavigation}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
-                          {item.text}
-                        </Link>
+                          {child.name}
+                        </RouterLink>
                       ))}
                     </div>
                   )}
                 </div>
-
-                {/* JEE Mobile Dropdown */}
-                <div className="relative">
-                  <button
-                    className="w-full flex justify-between items-center px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                    onClick={() => {
-                      setMobileJeeOpen(!mobileJeeOpen);
-                      setMobileNeetOpen(false);
-                    }}
-                  >
-                    <span>JEE</span>
-                    <ChevronDown className={`h-4 w-4 transform transition-transform duration-200 ${mobileJeeOpen ? 'rotate-180' : ''}`} />
-                  </button>
-                  {mobileJeeOpen && (
-                    <div className="pl-4 space-y-1 animate-slideDown">
-                      {navItems[2].items?.map((item, index) => (
-                        <Link
-                          key={index}
-                          to={item.path}
-                          className="block px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {item.text}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Chemistry Links */}
-                {navItems.slice(3, -1).map((item, index) => (
-                  <Link
-                    key={index}
-                    to={item.path}
-                    className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.text}
-                  </Link>
-                ))}
-
-                {/* Contact Link */}
-                <Link
-                  to="/contact"
-                  className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                  onClick={() => setIsOpen(false)}
+              ) : (
+                <RouterLink
+                  to={item.href}
+                  onClick={handleNavigation}
+                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600"
                 >
-                  Contact
-                </Link>
-              </div>
+                  {item.name}
+                </RouterLink>
+              )}
             </div>
-          </div>
-        )}
+          ))}
+        </div>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <RouterLink
+            to="/contact"
+            onClick={handleNavigation}
+            className="rounded-full bg-gradient-to-r from-blue-600 to-teal-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Get Started
+          </RouterLink>
+        </div>
       </nav>
-      
-      {/* Spacer to prevent content from hiding under fixed navbar */}
-      <div className="h-16" />
-    </>
+    </header>
   );
 }

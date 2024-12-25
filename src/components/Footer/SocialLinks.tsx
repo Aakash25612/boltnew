@@ -19,7 +19,8 @@ export function SocialLinks() {
             href={item.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-400 hover:text-gray-300"
+            className="text-gray-400 hover:text-gray-300 transition-colors"
+            aria-label={`Visit our ${item.name} page`}
           >
             <span className="sr-only">{item.name}</span>
             <Icon className="h-5 w-5" aria-hidden="true" />
