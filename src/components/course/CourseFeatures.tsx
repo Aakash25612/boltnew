@@ -1,10 +1,9 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
-import { formatNCERTText } from '../../utils/formatDescription';
 
 export interface Feature {
   title: string;
-  description: string | JSX.Element;
+  description: string;
 }
 
 interface CourseFeaturesProps {
@@ -21,12 +20,7 @@ export default function CourseFeatures({ features }: CourseFeaturesProps) {
             <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
             <div className="ml-4">
               <h3 className="font-semibold text-gray-900">{feature.title}</h3>
-              <div className="text-gray-600">
-                {typeof feature.description === 'string' 
-                  ? formatNCERTText(feature.description)
-                  : feature.description
-                }
-              </div>
+              <p className="text-gray-600">{feature.description}</p>
             </div>
           </div>
         ))}
